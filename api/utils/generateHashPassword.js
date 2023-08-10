@@ -1,18 +1,18 @@
 import bcrypt from "bcrypt";
 
-export const generateHashPassword = (password) => {
+export const generateHashPassword = async (password) => {
   try {
-    const salt = bcrypt.genSalt(10);
-    const hashPassword = bcrypt.hash(password, salt);
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(password, salt);
     return hashPassword;
   } catch (error) {
     console.log(error);
   }
 };
 
-export const verifyPassword = (password, hashPassword) => {
+export const verifyPassword = async (password, hashPassword) => {
   try {
-    return bcrypt.compare(password, hashPassword);
+    return await bcrypt.compare(password, hashPassword);
   } catch (error) {
     console.log(error);
   }
