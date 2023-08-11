@@ -4,13 +4,13 @@ import handleUrl from "../controllers/url.js";
 
 const router = express.Router();
 
-router.use("/analytics/:id", userAuthentication);
+router.use("/urlAnalytics", userAuthentication);
 
 // public routes
 router.route("/:id").get(handleUrl.redirectTo);
 
 // protected routes
 router.route("/registerUrl").post(handleUrl.registerUrl);
-router.route("/analytics/:id").get(handleUrl.urlAnalytics);
+router.route("/urlAnalytics").get(handleUrl.urlAnalytics);
 
 export default router;
