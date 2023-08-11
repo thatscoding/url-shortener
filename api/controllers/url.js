@@ -40,24 +40,33 @@ class handleUrl {
         createdBy: user.userId,
       });
       await doc.save();
-      res.status(201).json({ message: "successfully saved." });
+      res.status(201).json({
+        message: "successfully saved.",
+        url: `http://localhost:8000/${id}`,
+      });
     } else {
-      res.status(400).json({ message: "url is not found" });
+      res.json({ status: "failed", message: "url is not found" });
     }
   };
 
   static urlAnalytics = async (req, res) => {
-    const id = req.params.id;
-    try {
-      const doc = await URL.findOne({ shortid: id }).populate(
-        "createdBy",
-        "-password"
-      );
-      res.status(200).json({ noOfVisits: doc.visitHistory.length, data: doc });
-    } catch (err) {
-      res.status(400).json({ error: err });
-    }
+    const { token } = req.cookies;
+    console.log("token", token);
+    res.json({ status: "okay" });
   };
 }
 
 export default handleUrl;
+
+// static urlAnalytics = async (req, res) => {
+//   const id = req.params.id;
+//   try {
+//     const doc = await URL.findOne({ shortid: id }).populate(
+//       "createdBy",
+//       "-password"
+//     );
+//     res.status(200).json({ noOfVisits: doc.visitHistory.length, data: doc });
+//   } catch (err) {
+//     res.status(400).json({ error: err });
+//   }
+// };

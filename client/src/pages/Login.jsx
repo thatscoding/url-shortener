@@ -11,16 +11,13 @@ const Login = () => {
     const res = await LoginUser(data);
     console.log(res);
 
-    if (res.data.status === "failed") {
-      alert(res.data.message);
+    if (res?.data?.status === "failed") {
+      alert(res?.data?.message);
       reset();
     } else {
-      alert(res.data.message);
-
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-
+      localStorage.setItem("user", JSON.stringify(res?.data?.user));
       reset();
-      navigate("/analytics");
+      window.location.href = "/analytics";
     }
   };
 

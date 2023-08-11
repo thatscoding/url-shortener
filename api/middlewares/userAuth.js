@@ -4,7 +4,6 @@ export const userAuthentication = async (req, res, next) => {
   const { token } = req.cookies;
   if (token) {
     const payload = await verifyToken(token);
-    console.log("payload", payload);
     req.user = payload;
     next();
   } else {

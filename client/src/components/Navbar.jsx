@@ -1,11 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { logoutUser } from "../services/api";
 
 function Navbar() {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
   useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem(user)));
-  });
+    const data = localStorage.getItem("user") || null;
+    if (data) {
+      setUser(JSON.parse(data));
+    }
+  }, []);
+
+  const logout = async () => {
+    await logoutUser();
+    localStorage.setItem("user", "");
+    await window.location.reload(true);
+    setTimeout(() => {
+      navigate("/login");
+    }, 2000);
+  };
 
   console.log(user);
 
@@ -34,26 +48,43 @@ function Navbar() {
             <Link to="/">
               <a className="mr-5 hover:text-gray-900">Home</a>
             </Link>
-            <Link to="/shorturl">
-              <a className="mr-5 hover:text-gray-900">Short URL</a>
-            </Link>
 
-            <Link to="/analytics">
-              <a className="mr-5 hover:text-gray-900">Dashboard</a>
-            </Link>
+            {user ? (
+              <>
+                <Link to="/shorturl">
+                  <a className="mr-5 hover:text-gray-900">Generate URL</a>
+                </Link>
+
+                <Link to="/analytics">
+                  <a className="mr-5 hover:text-gray-900">Dashboard</a>
+                </Link>
+              </>
+            ) : null}
           </nav>
-          <div className="flex gap-4 flex-wrap">
-            <Link to="/login">
-              <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
-                Login
+          {user ? (
+            <div className="flex gap-4 flex-wrap items-center">
+              <h1 className="text-xl">{user.username}</h1>
+              <button
+                onClick={() => logout()}
+                className="border border-red-500 text-red-600 inline-flex items-center bg-gray-100  py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"
+              >
+                Logout
               </button>
-            </Link>
-            <Link to="/register">
-              <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
-                Sign Up
-              </button>
-            </Link>
-          </div>
+            </div>
+          ) : (
+            <div className="flex gap-4 flex-wrap">
+              <Link to="/login">
+                <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
+                  Login
+                </button>
+              </Link>
+              <Link to="/register">
+                <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
+                  Sign Up
+                </button>
+              </Link>
+            </div>
+          )}
         </div>
       </header>
     </div>
